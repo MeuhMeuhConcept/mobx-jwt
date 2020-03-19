@@ -1,0 +1,4 @@
+.home-developer
+docker-compose.yml
+.env
+node_modules/

@@ -1,0 +1,36 @@
+{
+  "name": "mobx-jwt",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "typings": "src/index",
+  "repository": "git@github.com:MeuhMeuhConcept/mobx-jwt.git",
+  "author": "jngermon <jn.germon@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "concurrently -k -n \"Typescript,Eslint\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"esw --watch --ext=.ts,.tsx src/*\"",
+    "eslint": "eslint --ext=.ts,.tsx src/*",
+    "build": "tsc",
+    "test": "jest --verbose"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/jsonwebtoken": "^8.3.8",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "concurrently": "^5.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-watch": "^6.0.1",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3",
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "mobx": "^5.15.4",
+    "rich-agent": "^1.1.0",
+    "universal-cookie": "^4.0.3"
+  }
+}
