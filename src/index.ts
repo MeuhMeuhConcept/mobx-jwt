@@ -1,1 +1,1 @@
-export * from './store'
+export { Store, Informations, Options } from './store'
