@@ -1,8 +1,8 @@
 {
   "name": "mobx-jwt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "build/index.js",
-  "typings": "src/index",
+  "typings": "build/index",
   "repository": "git@github.com:MeuhMeuhConcept/mobx-jwt.git",
   "author": "jngermon <jn.germon@gmail.com>",
   "license": "MIT",
