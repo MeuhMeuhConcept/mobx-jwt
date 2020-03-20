@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { action, observable, computed, when } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { TokenRequest } from './token-request';
 import { RefreshTokenRequest } from './refresh-token-request';
 import * as jwt from 'jsonwebtoken';
@@ -28,20 +28,19 @@ export class Store {
         return this._request.status;
     }
     login(username, password, rememberMe = false) {
-        if (this._request.status === 'pending') {
+        if (this.loadingStatus === 'pending') {
             return;
         }
         this._request.send({
             username: username,
             password: password,
             rememberMe: rememberMe
-        });
-        when(() => this._request.status !== 'pending', () => {
-            if (this._request.status === 'done') {
-                this.token = this._request.responseData.token;
-                this.informations = Object.assign(this.informations, this._request.responseData.decoded);
-                this.saveTokenInCookie(rememberMe);
-            }
+        }).then((response) => {
+            this.token = this._request.responseData.token;
+            this.informations = Object.assign(this.informations, this._request.responseData.decoded);
+            this.saveTokenInCookie(rememberMe);
+        }).catch((response) => {
+            // do nothing
         });
     }
     logout() {

@@ -55,7 +55,7 @@ export abstract class Store<T extends Informations> {
 
     @action
     public login (username: string, password: string, rememberMe: boolean = false) {
-        if (this._request.status === 'pending') {
+        if (this.loadingStatus === 'pending') {
             return
         }
 
@@ -63,14 +63,12 @@ export abstract class Store<T extends Informations> {
             username: username,
             password: password,
             rememberMe: rememberMe
-        })
-
-        when(() => this._request.status !== 'pending', () => {
-            if (this._request.status === 'done') {
-                this.token = this._request.responseData.token
-                this.informations = Object.assign(this.informations, this._request.responseData.decoded)
-                this.saveTokenInCookie(rememberMe)
-            }
+        }).then((response: Response.Response) => {
+            this.token = this._request.responseData.token
+            this.informations = Object.assign(this.informations, this._request.responseData.decoded)
+            this.saveTokenInCookie(rememberMe)
+        }).catch((response: Response | Error) => {
+            // do nothing
         })
     }
 
