@@ -25,6 +25,9 @@ export class Store {
         this.loadTokenFromCookie();
         this.loadTokenFromUrl();
     }
+    get endpoint() {
+        return this._apiEndpoint;
+    }
     get connected() {
         return this.token !== '';
     }

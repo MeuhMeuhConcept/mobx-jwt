@@ -22,6 +22,7 @@ export declare abstract class Store<T extends Informations> {
     protected _refreshToken: RefreshTokenRequest;
     constructor(options: Options);
     protected abstract createInformations(): T;
+    get endpoint(): string;
     get connected(): boolean;
     login(username: string, password: string, rememberMe?: boolean): void;
     logout(): void;

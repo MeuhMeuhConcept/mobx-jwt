@@ -48,6 +48,10 @@ export abstract class Store<T extends Informations> {
 
     protected abstract createInformations(): T
 
+    public get endpoint (): string {
+        return this._apiEndpoint
+    }
+
     @computed
     public get connected (): boolean {
         return this.token !== ''
