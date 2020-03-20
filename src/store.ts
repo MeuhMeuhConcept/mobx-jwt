@@ -64,9 +64,7 @@ export abstract class Store<T extends Informations> {
             password: password,
             rememberMe: rememberMe
         }).then((response: Response.Response) => {
-            this.token = this._request.responseData.token
-            this.informations = Object.assign(this.informations, this._request.responseData.decoded)
-            this.saveTokenInCookie(rememberMe)
+            this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
         }).catch((response: Response | Error) => {
             // do nothing
         })
@@ -128,12 +126,12 @@ export abstract class Store<T extends Informations> {
     }
 
     @action
-    protected updateToken (token: string, decoded: Informations, andSave: boolean = true) {
+    protected updateToken (token: string, decoded: Informations, andSave: boolean = true, rememberMe: boolean = false) {
         this.token = token
         this.informations = Object.assign(this.informations, decoded)
 
         if (andSave) {
-            this.saveTokenInCookie()
+            this.saveTokenInCookie(rememberMe)
         }
     }
 

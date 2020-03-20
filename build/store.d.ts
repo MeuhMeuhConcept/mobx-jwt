@@ -29,7 +29,7 @@ export declare abstract class Store<T extends Informations> {
     protected saveTokenInCookie(longlife?: boolean): void;
     protected deleteTokenCookie(): void;
     protected refreshTokenIfItNeed(): void;
-    protected updateToken(token: string, decoded: Informations, andSave?: boolean): void;
+    protected updateToken(token: string, decoded: Informations, andSave?: boolean, rememberMe?: boolean): void;
     protected tokenHasToBeRefreshed(): boolean;
     protected loadTokenFromUrl(): void;
 }

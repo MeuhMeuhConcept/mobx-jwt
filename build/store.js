@@ -36,9 +36,7 @@ export class Store {
             password: password,
             rememberMe: rememberMe
         }).then((response) => {
-            this.token = this._request.responseData.token;
-            this.informations = Object.assign(this.informations, this._request.responseData.decoded);
-            this.saveTokenInCookie(rememberMe);
+            this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe);
         }).catch((response) => {
             // do nothing
         });
@@ -89,11 +87,11 @@ export class Store {
             // do nothing
         });
     }
-    updateToken(token, decoded, andSave = true) {
+    updateToken(token, decoded, andSave = true, rememberMe = false) {
         this.token = token;
         this.informations = Object.assign(this.informations, decoded);
         if (andSave) {
-            this.saveTokenInCookie();
+            this.saveTokenInCookie(rememberMe);
         }
     }
     tokenHasToBeRefreshed() {
