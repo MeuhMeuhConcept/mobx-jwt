@@ -11,11 +11,15 @@ import * as jwt from 'jsonwebtoken';
 import Cookies from 'universal-cookie';
 export class Store {
     constructor(options) {
+        this.status = 'waiting';
         this.token = '';
         this._apiEndpoint = options.endpoint;
         this._apiPublicKey = options.publicKey;
         this.informations = this.createInformations();
         this._request = new TokenRequest(options.endpoint, options.publicKey);
+        this._request.onStatusChange(action((status) => {
+            this.status = status;
+        }));
         this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey);
         this._cookies = new Cookies();
         this.loadTokenFromCookie();
@@ -24,11 +28,8 @@ export class Store {
     get connected() {
         return this.token !== '';
     }
-    get loadingStatus() {
-        return this._request.status;
-    }
     login(username, password, rememberMe = false) {
-        if (this.loadingStatus === 'pending') {
+        if (this.status === 'pending') {
             return;
         }
         this._request.send({
@@ -125,6 +126,9 @@ export class Store {
 }
 __decorate([
     observable
+], Store.prototype, "status", void 0);
+__decorate([
+    observable
 ], Store.prototype, "token", void 0);
 __decorate([
     observable
@@ -132,9 +136,6 @@ __decorate([
 __decorate([
     computed
 ], Store.prototype, "connected", null);
-__decorate([
-    computed
-], Store.prototype, "loadingStatus", null);
 __decorate([
     action
 ], Store.prototype, "login", null);

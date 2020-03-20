@@ -15,6 +15,7 @@ export declare abstract class Store<T extends Informations> {
     protected _apiEndpoint: string;
     protected _apiPublicKey: string;
     protected _request: TokenRequest;
+    status: Request.Status;
     token: string;
     informations: T;
     protected _cookies: Cookies;
@@ -22,7 +23,6 @@ export declare abstract class Store<T extends Informations> {
     constructor(options: Options);
     protected abstract createInformations(): T;
     get connected(): boolean;
-    get loadingStatus(): Request.Status;
     login(username: string, password: string, rememberMe?: boolean): void;
     logout(): void;
     protected loadTokenFromCookie(): void;

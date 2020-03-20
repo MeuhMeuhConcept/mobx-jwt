@@ -20,6 +20,7 @@ export abstract class Store<T extends Informations> {
     protected _apiEndpoint: string
     protected _apiPublicKey: string
     protected _request: TokenRequest
+    @observable status: Request.Status = 'waiting'
     @observable token: string = ''
     @observable informations: T
     protected _cookies: Cookies
@@ -32,6 +33,10 @@ export abstract class Store<T extends Informations> {
         this.informations = this.createInformations()
 
         this._request = new TokenRequest(options.endpoint, options.publicKey)
+        this._request.onStatusChange(action((status: Request.Status) => {
+            this.status = status
+        }))
+
         this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey)
 
         this._cookies = new Cookies()
@@ -48,14 +53,9 @@ export abstract class Store<T extends Informations> {
         return this.token !== ''
     }
 
-    @computed
-    public get loadingStatus (): Request.Status {
-        return this._request.status
-    }
-
     @action
     public login (username: string, password: string, rememberMe: boolean = false) {
-        if (this.loadingStatus === 'pending') {
+        if (this.status === 'pending') {
             return
         }
 
