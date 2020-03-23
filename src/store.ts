@@ -16,7 +16,7 @@ export interface Informations {
     username: string
 }
 
-export abstract class Store<T extends Informations> {
+export abstract class Store<T extends Informations> implements Request.AuthorizationService{
     protected _apiEndpoint: string
     protected _apiPublicKey: string
     protected _request: TokenRequest
@@ -52,6 +52,20 @@ export abstract class Store<T extends Informations> {
         return this._apiEndpoint
     }
 
+    public get authorizationToken (): string {
+        return this.token
+    }
+
+    public get authorizationPrefix (): string {
+        return 'Bearer'
+    }
+
+    public onAuthorizationError (responseStatus: any | null, responseTextStatus: any | null): void {
+        if( responseStatus === 401) {
+            this.logout()
+        }
+    }
+
     @computed
     public get connected (): boolean {
         return this.token !== ''
@@ -82,11 +96,11 @@ export abstract class Store<T extends Informations> {
     }
 
     protected loadTokenFromCookie () {
-        let token = this._cookies.get('api-token')
+        const token = this._cookies.get('api-token')
 
         if (token) {
             try {
-                let decoded = jwt.verify(token, this._apiPublicKey)
+                const decoded = jwt.verify(token, this._apiPublicKey)
                 if (decoded) {
                     this.token = token
                     this.informations = Object.assign(this.informations, decoded)
@@ -100,7 +114,7 @@ export abstract class Store<T extends Informations> {
 
     protected saveTokenInCookie (longlife: boolean = false) {
         if (this.token) {
-            let options: CookieSetOptions = {
+            const options: CookieSetOptions = {
                 path: '/'
             }
 
@@ -155,11 +169,11 @@ export abstract class Store<T extends Informations> {
         const results = regex.exec(location.search)
 
         if (results !== null) {
-            let token = decodeURIComponent(results[1].replace(/\+/g, ' '))
+            const token = decodeURIComponent(results[1].replace(/\+/g, ' '))
 
             if (token) {
                 try {
-                    let decoded = jwt.verify(token, this._apiPublicKey)
+                    const decoded = jwt.verify(token, this._apiPublicKey)
                     if (decoded) {
                         this.token = token
                         this.informations = Object.assign(this.informations, decoded)

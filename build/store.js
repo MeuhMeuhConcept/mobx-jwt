@@ -28,6 +28,17 @@ export class Store {
     get endpoint() {
         return this._apiEndpoint;
     }
+    get authorizationToken() {
+        return this.token;
+    }
+    get authorizationPrefix() {
+        return 'Bearer';
+    }
+    onAuthorizationError(responseStatus, responseTextStatus) {
+        if (responseStatus === 401) {
+            this.logout();
+        }
+    }
     get connected() {
         return this.token !== '';
     }
@@ -51,10 +62,10 @@ export class Store {
         this.deleteTokenCookie();
     }
     loadTokenFromCookie() {
-        let token = this._cookies.get('api-token');
+        const token = this._cookies.get('api-token');
         if (token) {
             try {
-                let decoded = jwt.verify(token, this._apiPublicKey);
+                const decoded = jwt.verify(token, this._apiPublicKey);
                 if (decoded) {
                     this.token = token;
                     this.informations = Object.assign(this.informations, decoded);
@@ -68,7 +79,7 @@ export class Store {
     }
     saveTokenInCookie(longlife = false) {
         if (this.token) {
-            let options = {
+            const options = {
                 path: '/'
             };
             if (longlife) {
@@ -110,10 +121,10 @@ export class Store {
         const regex = new RegExp('[\\?&]token=([^&#]*)');
         const results = regex.exec(location.search);
         if (results !== null) {
-            let token = decodeURIComponent(results[1].replace(/\+/g, ' '));
+            const token = decodeURIComponent(results[1].replace(/\+/g, ' '));
             if (token) {
                 try {
-                    let decoded = jwt.verify(token, this._apiPublicKey);
+                    const decoded = jwt.verify(token, this._apiPublicKey);
                     if (decoded) {
                         this.token = token;
                         this.informations = Object.assign(this.informations, decoded);

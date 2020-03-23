@@ -7,9 +7,9 @@ export class RefreshTokenRequest extends ApiRequest {
     }
     transformResponseData(data) {
         try {
-            let jsonData = JSON.parse(this._responseData);
+            const jsonData = JSON.parse(this._responseData);
             try {
-                let decoded = jwt.verify(jsonData.token, this._apiPublicKey);
+                const decoded = jwt.verify(jsonData.token, this._apiPublicKey);
                 if (decoded) {
                     this._responseData = {
                         token: jsonData.token,

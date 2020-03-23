@@ -11,7 +11,7 @@ export interface Informations {
     exp: number;
     username: string;
 }
-export declare abstract class Store<T extends Informations> {
+export declare abstract class Store<T extends Informations> implements Request.AuthorizationService {
     protected _apiEndpoint: string;
     protected _apiPublicKey: string;
     protected _request: TokenRequest;
@@ -23,6 +23,9 @@ export declare abstract class Store<T extends Informations> {
     constructor(options: Options);
     protected abstract createInformations(): T;
     get endpoint(): string;
+    get authorizationToken(): string;
+    get authorizationPrefix(): string;
+    onAuthorizationError(responseStatus: any | null, responseTextStatus: any | null): void;
     get connected(): boolean;
     login(username: string, password: string, rememberMe?: boolean): void;
     logout(): void;

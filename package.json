@@ -1,6 +1,6 @@
 {
   "name": "mobx-jwt",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "main": "build/index.js",
   "typings": "build/index",
   "repository": "git@github.com:MeuhMeuhConcept/mobx-jwt.git",
@@ -30,7 +30,7 @@
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "mobx": "^5.15.4",
-    "rich-agent": "^1.1.0",
+    "rich-agent": "^1.2.2",
     "universal-cookie": "^4.0.3"
   }
 }
