@@ -1,23 +1,35 @@
 .PHONY: help console
 
-docker-compose.yml:
-	cp docker-compose.yml.dist $@
+bash: ## Launch bash in docker container with PHP
+	docker run \
+		--name=mobx-jwt_console \
+		--volume=$(shell pwd):/srv \
+		--env USERNAME=$(shell whoami) \
+		--env UNIX_UID=$(shell id -u) \
+		--env=CONTAINER_SHELL=/bin/bash \
+		--env=NODE_ENV=development \
+		--workdir=/srv \
+		--interactive \
+		--tty \
+		--rm \
+		meuhmeuhconcept/php:2.3.2 \
+		/bin/login -p -f $(shell whoami)
 
-.env:
-	cp .env.dist $@
-	sed --in-place "s/{your_unix_local_username}/$(shell whoami)/" $@
-	sed --in-place "s/{your_unix_local_uid}/$(shell id -u)/" $@
-
-install: docker-compose.yml .env ## Install
-
-start: docker-compose.yml .env ## Launch containers
-	docker-compose up -d
-
-stop: ## Stop containers
-	docker-compose stop
-
-console: ## Connect to console container
-	docker exec -it mobx-jwt_appserver /bin/login -p -f $(shell whoami)
+console: ## Launch zsh in docker container with PHP
+	docker run \
+		--name=mobx-jwt_console \
+		--volume=$(shell pwd):/srv \
+		--volume=$$HOME/.home-developer:/home/developer \
+		--env USERNAME=$(shell whoami) \
+		--env UNIX_UID=$(shell id -u) \
+		--env=CONTAINER_SHELL=/bin/zsh \
+		--env=NODE_ENV=development \
+		--workdir=/srv \
+		--interactive \
+		--tty \
+		--rm \
+		meuhmeuhconcept/php:2.3.2 \
+		/bin/login -p -f $(shell whoami)
 
 test:
 	yarn test --passWithNoTests
