@@ -92,7 +92,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this.deleteTokenCookie()
     }
 
-    public buildLoginData (username: string, password: string, rememberMe: boolean = false) {
+    protected buildLoginData (username: string, password: string, rememberMe: boolean = false): {} {
         return {
             username: username,
             password: password,
