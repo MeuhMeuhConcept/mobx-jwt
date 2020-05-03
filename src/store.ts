@@ -77,11 +77,8 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             return
         }
 
-        this._request.send({
-            username: username,
-            password: password,
-            rememberMe: rememberMe
-        }).then((response: Response.Response) => {
+        this._request.send(this.buildLoginData(username, password, rememberMe))
+        .then((response: Response.Response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
         }).catch((response: Response | Error) => {
             // do nothing
@@ -93,6 +90,14 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this.token = ''
         this.informations = this.createInformations()
         this.deleteTokenCookie()
+    }
+
+    public buildLoginData (username: string, password: string, rememberMe: boolean = false) {
+        return {
+            username: username,
+            password: password,
+            rememberMe: rememberMe
+        }
     }
 
     protected loadTokenFromCookie () {

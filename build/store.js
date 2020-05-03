@@ -46,11 +46,8 @@ export class Store {
         if (this.status === 'pending') {
             return;
         }
-        this._request.send({
-            username: username,
-            password: password,
-            rememberMe: rememberMe
-        }).then((response) => {
+        this._request.send(this.buildLoginData(username, password, rememberMe))
+            .then((response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe);
         }).catch((response) => {
             // do nothing
@@ -60,6 +57,13 @@ export class Store {
         this.token = '';
         this.informations = this.createInformations();
         this.deleteTokenCookie();
+    }
+    buildLoginData(username, password, rememberMe = false) {
+        return {
+            username: username,
+            password: password,
+            rememberMe: rememberMe
+        };
     }
     loadTokenFromCookie() {
         const token = this._cookies.get('api-token');
