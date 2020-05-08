@@ -72,12 +72,14 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     }
 
     @action
-    public login (username: string, password: string, rememberMe: boolean = false) {
+    public login (username: string, password: string, rememberMe: boolean = false): Promise<any> {
         if (this.status === 'pending') {
-            return
+            return new Promise((resolve, reject) => {
+                reject()
+            })
         }
 
-        this._request.send(this.buildLoginData(username, password, rememberMe))
+        return this._request.send(this.buildLoginData(username, password, rememberMe))
         .then((response: Response.Response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
         }).catch((response: Response | Error) => {

@@ -44,9 +44,11 @@ export class Store {
     }
     login(username, password, rememberMe = false) {
         if (this.status === 'pending') {
-            return;
+            return new Promise((resolve, reject) => {
+                reject();
+            });
         }
-        this._request.send(this.buildLoginData(username, password, rememberMe))
+        return this._request.send(this.buildLoginData(username, password, rememberMe))
             .then((response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe);
         }).catch((response) => {
