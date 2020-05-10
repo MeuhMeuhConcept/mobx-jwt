@@ -51,8 +51,7 @@ export class Store {
         return this._request.send(this.buildLoginData(username, password, rememberMe))
             .then((response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe);
-        }).catch((response) => {
-            // do nothing
+            return response;
         });
     }
     logout() {

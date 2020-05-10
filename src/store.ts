@@ -82,8 +82,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         return this._request.send(this.buildLoginData(username, password, rememberMe))
         .then((response: Response.Response) => {
             this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
-        }).catch((response: Response | Error) => {
-            // do nothing
+            return response
         })
     }
 
