@@ -96,13 +96,13 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             if (this._notifyLogout) {
                 this._requestLogout.addAuthorization(this.token)
                 this._requestLogout.send()
-                    .then(() => {
+                    .then(action(() => {
                         this.token = ''
                         this.informations = this.createInformations()
                         this.deleteTokenCookie()
 
                         resolve()
-                    })
+                    }))
                     .catch(() => {
                         reject()
                     })
