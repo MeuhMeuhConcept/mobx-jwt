@@ -66,7 +66,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
 
     public onAuthorizationError (responseStatus: any | null, responseTextStatus: any | null): void {
         if( responseStatus === 401) {
-            this.logout()
+            this.eraseCredentials()
         }
     }
 
@@ -96,25 +96,32 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             if (this._notifyLogout) {
                 this._requestLogout.addAuthorization(this.token)
                 this._requestLogout.send()
-                    .then(action(() => {
-                        this.token = ''
-                        this.informations = this.createInformations()
-                        this.deleteTokenCookie()
+                    .then(() => {
+                        this.eraseCredentials()
 
                         resolve()
-                    }))
+                    })
                     .catch(() => {
                         reject()
                     })
             } else {
-                this.token = ''
-                this.informations = this.createInformations()
-                this.deleteTokenCookie()
+                this.eraseCredentials()
 
                 resolve()
             }
 
         })
+    }
+
+    public forceLogout () {
+        this.eraseCredentials()
+    }
+
+    @action
+    protected eraseCredentials () {
+        this.token = ''
+        this.informations = this.createInformations()
+        this.deleteTokenCookie()
     }
 
     protected buildLoginData (username: string, password: string, rememberMe: boolean = false): {} {

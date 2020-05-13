@@ -32,6 +32,8 @@ export declare abstract class Store<T extends Informations> implements Request.A
     get connected(): boolean;
     login(username: string, password: string, rememberMe?: boolean): Promise<any>;
     logout(): Promise<any>;
+    forceLogout(): void;
+    protected eraseCredentials(): void;
     protected buildLoginData(username: string, password: string, rememberMe?: boolean): {};
     protected loadTokenFromCookie(): void;
     protected saveTokenInCookie(longlife?: boolean): void;

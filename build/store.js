@@ -39,7 +39,7 @@ export class Store {
     }
     onAuthorizationError(responseStatus, responseTextStatus) {
         if (responseStatus === 401) {
-            this.logout();
+            this.eraseCredentials();
         }
     }
     get connected() {
@@ -62,23 +62,27 @@ export class Store {
             if (this._notifyLogout) {
                 this._requestLogout.addAuthorization(this.token);
                 this._requestLogout.send()
-                    .then(action(() => {
-                    this.token = '';
-                    this.informations = this.createInformations();
-                    this.deleteTokenCookie();
+                    .then(() => {
+                    this.eraseCredentials();
                     resolve();
-                }))
+                })
                     .catch(() => {
                     reject();
                 });
             }
             else {
-                this.token = '';
-                this.informations = this.createInformations();
-                this.deleteTokenCookie();
+                this.eraseCredentials();
                 resolve();
             }
         });
+    }
+    forceLogout() {
+        this.eraseCredentials();
+    }
+    eraseCredentials() {
+        this.token = '';
+        this.informations = this.createInformations();
+        this.deleteTokenCookie();
     }
     buildLoginData(username, password, rememberMe = false) {
         return {
@@ -182,6 +186,9 @@ __decorate([
 __decorate([
     action
 ], Store.prototype, "logout", null);
+__decorate([
+    action
+], Store.prototype, "eraseCredentials", null);
 __decorate([
     action
 ], Store.prototype, "updateToken", null);
