@@ -1,5 +1,6 @@
 import { TokenRequest } from './token-request';
 import { RefreshTokenRequest } from './refresh-token-request';
+import { LogoutRequest } from './logout-request';
 import { Request } from 'rich-agent';
 import Cookies from 'universal-cookie';
 export interface Options {
@@ -20,6 +21,8 @@ export declare abstract class Store<T extends Informations> implements Request.A
     informations: T;
     protected _cookies: Cookies;
     protected _refreshToken: RefreshTokenRequest;
+    protected _requestLogout: LogoutRequest;
+    protected _notifyLogout: boolean;
     constructor(options: Options);
     protected abstract createInformations(): T;
     get endpoint(): string;
@@ -28,7 +31,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     onAuthorizationError(responseStatus: any | null, responseTextStatus: any | null): void;
     get connected(): boolean;
     login(username: string, password: string, rememberMe?: boolean): Promise<any>;
-    logout(): void;
+    logout(): Promise<any>;
     protected buildLoginData(username: string, password: string, rememberMe?: boolean): {};
     protected loadTokenFromCookie(): void;
     protected saveTokenInCookie(longlife?: boolean): void;

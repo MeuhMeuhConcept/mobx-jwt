@@ -1,6 +1,7 @@
 import { action, observable, computed, when } from 'mobx'
 import { TokenRequest } from './token-request'
 import { RefreshTokenRequest } from './refresh-token-request'
+import { LogoutRequest } from './logout-request'
 import { Request, Response } from 'rich-agent'
 import * as jwt from 'jsonwebtoken'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
@@ -25,6 +26,8 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     @observable informations: T
     protected _cookies: Cookies
     protected _refreshToken: RefreshTokenRequest
+    protected _requestLogout: LogoutRequest
+    protected _notifyLogout: boolean = true
 
     constructor (options: Options) {
         this._apiEndpoint = options.endpoint
@@ -38,6 +41,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }))
 
         this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey)
+        this._requestLogout = new LogoutRequest(options.endpoint)
 
         this._cookies = new Cookies()
 
@@ -87,10 +91,30 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     }
 
     @action
-    public logout () {
-        this.token = ''
-        this.informations = this.createInformations()
-        this.deleteTokenCookie()
+    public logout (): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (this._notifyLogout) {
+                this._requestLogout.addAuthorization(this.token)
+                this._requestLogout.send()
+                    .then(() => {
+                        this.token = ''
+                        this.informations = this.createInformations()
+                        this.deleteTokenCookie()
+
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+            } else {
+                this.token = ''
+                this.informations = this.createInformations()
+                this.deleteTokenCookie()
+
+                resolve()
+            }
+
+        })
     }
 
     protected buildLoginData (username: string, password: string, rememberMe: boolean = false): {} {

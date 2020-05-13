@@ -7,12 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { action, observable, computed } from 'mobx';
 import { TokenRequest } from './token-request';
 import { RefreshTokenRequest } from './refresh-token-request';
+import { LogoutRequest } from './logout-request';
 import * as jwt from 'jsonwebtoken';
 import Cookies from 'universal-cookie';
 export class Store {
     constructor(options) {
         this.status = 'waiting';
         this.token = '';
+        this._notifyLogout = true;
         this._apiEndpoint = options.endpoint;
         this._apiPublicKey = options.publicKey;
         this.informations = this.createInformations();
@@ -21,6 +23,7 @@ export class Store {
             this.status = status;
         }));
         this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey);
+        this._requestLogout = new LogoutRequest(options.endpoint);
         this._cookies = new Cookies();
         this.loadTokenFromCookie();
         this.loadTokenFromUrl();
@@ -55,9 +58,27 @@ export class Store {
         });
     }
     logout() {
-        this.token = '';
-        this.informations = this.createInformations();
-        this.deleteTokenCookie();
+        return new Promise((resolve, reject) => {
+            if (this._notifyLogout) {
+                this._requestLogout.addAuthorization(this.token);
+                this._requestLogout.send()
+                    .then(() => {
+                    this.token = '';
+                    this.informations = this.createInformations();
+                    this.deleteTokenCookie();
+                    resolve();
+                })
+                    .catch(() => {
+                    reject();
+                });
+            }
+            else {
+                this.token = '';
+                this.informations = this.createInformations();
+                this.deleteTokenCookie();
+                resolve();
+            }
+        });
     }
     buildLoginData(username, password, rememberMe = false) {
         return {
