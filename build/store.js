@@ -113,14 +113,12 @@ export class Store {
             }
         }
     }
-    saveTokenInCookie(longlife = false) {
+    saveTokenInCookie() {
         if (this.token) {
             const options = {
                 path: '/'
             };
-            if (longlife) {
-                options.maxAge = 3600 * 24 * 7;
-            }
+            options.maxAge = this.informations.exp - this.informations.iat;
             this._cookies.set('api-token', this.token, options);
         }
     }
@@ -142,7 +140,7 @@ export class Store {
         this.token = token;
         this.informations = Object.assign(this.informations, decoded);
         if (andSave) {
-            this.saveTokenInCookie(rememberMe);
+            this.saveTokenInCookie();
         }
     }
     tokenHasToBeRefreshed() {

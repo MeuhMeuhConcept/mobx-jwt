@@ -36,7 +36,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected eraseCredentials(): void;
     protected buildLoginData(username: string, password: string, rememberMe?: boolean): {};
     protected loadTokenFromCookie(): void;
-    protected saveTokenInCookie(longlife?: boolean): void;
+    protected saveTokenInCookie(): void;
     protected deleteTokenCookie(): void;
     protected refreshTokenIfItNeed(): void;
     protected updateToken(token: string, decoded: Informations, andSave?: boolean, rememberMe?: boolean): void;
