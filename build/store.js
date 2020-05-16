@@ -66,8 +66,14 @@ export class Store {
                     this.eraseCredentials();
                     resolve();
                 })
-                    .catch(() => {
-                    reject();
+                    .catch((response) => {
+                    if (response.data && response.data.message == 'Expired JWT Token') {
+                        this.eraseCredentials();
+                        resolve();
+                    }
+                    else {
+                        reject();
+                    }
                 });
             }
             else {

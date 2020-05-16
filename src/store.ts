@@ -101,8 +101,13 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
 
                         resolve()
                     })
-                    .catch(() => {
-                        reject()
+                    .catch((response: Response.Response) => {
+                        if (response.data && response.data.message == 'Expired JWT Token') {
+                            this.eraseCredentials()
+                            resolve()
+                        } else {
+                            reject()
+                        }
                     })
             } else {
                 this.eraseCredentials()
