@@ -8,7 +8,8 @@ import Cookies, { CookieSetOptions } from 'universal-cookie'
 
 export interface Options {
     endpoint: string,
-    publicKey: string
+    publicKey: string,
+    notifyLogout?: boolean
 }
 
 export interface Informations {
@@ -44,6 +45,8 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this._requestLogout = new LogoutRequest(options.endpoint)
 
         this._cookies = new Cookies()
+
+        this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true
 
         this.loadTokenFromCookie()
 

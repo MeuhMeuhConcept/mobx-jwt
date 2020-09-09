@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 export interface Options {
     endpoint: string;
     publicKey: string;
+    notifyLogout?: boolean;
 }
 export interface Informations {
     iat: number;

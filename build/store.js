@@ -25,6 +25,7 @@ export class Store {
         this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey);
         this._requestLogout = new LogoutRequest(options.endpoint);
         this._cookies = new Cookies();
+        this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
         this.loadTokenFromCookie();
         this.loadTokenFromUrl();
     }
