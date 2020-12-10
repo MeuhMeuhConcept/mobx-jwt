@@ -32,5 +32,9 @@
     "mobx": "^5.15.4",
     "rich-agent": "^2.1.0",
     "universal-cookie": "^4.0.3"
+  },
+  "resolutions": {
+    "lodash": "^4.17.19",
+    "yargs-parser": "^18.1.2"
   }
 }
