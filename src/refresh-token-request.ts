@@ -11,37 +11,26 @@ export class RefreshTokenRequest extends ApiRequest {
     }
 
     transformResponseData (data: string): boolean {
-        try {
-            const jsonData = JSON.parse(this._responseData)
-
-            try {
-                const decoded = jwt.verify(jsonData.token, this._apiPublicKey)
-                if (decoded) {
-                    this._responseData = {
-                        token: jsonData.token,
-                        decoded: decoded
-                    }
-                }
-            } catch (error) {
-                this._responseTextStatus = (error as jwt.JsonWebTokenError).message
-                return false
-            }
-
-        } catch (e) {
-            this._responseTextStatus = 'json_parse_error'
+        if (!super.transformResponseData(data)) {
             return false
         }
+        try {
+            const decoded = jwt.verify(this._responseData.token, this._apiPublicKey)
+            if (decoded) {
+                this._responseData = {
+                    token: this._responseData.token,
+                    decoded: decoded
+                }
+            }
+        } catch (error) {
+            this._responseTextStatus = (error as jwt.JsonWebTokenError).message
+            return false
+        }
+
         return true
     }
 
     transformErrorResponseData (data: string): boolean {
-        try {
-            this._responseData = JSON.parse(this._responseData)
-        } catch (e) {
-            this._responseTextStatus = 'json_parse_error'
-            return false
-        }
-
-        return true
+        return super.transformResponseData(data)
     }
 }
