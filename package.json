@@ -1,6 +1,6 @@
 {
   "name": "mobx-jwt",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "build/index.js",
   "typings": "build/index",
   "repository": "git@github.com:MeuhMeuhConcept/mobx-jwt.git",
@@ -35,6 +35,7 @@
   },
   "resolutions": {
     "lodash": "^4.17.19",
+    "node-notifier": "^8.0.1",
     "yargs-parser": "^18.1.2"
   }
 }
