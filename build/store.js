@@ -38,6 +38,7 @@ class Store {
         this._requestLogout = new logout_request_1.LogoutRequest(options.endpoint);
         this._cookies = new universal_cookie_1.default();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
+        this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : '';
         this.loadTokenFromCookie();
         this.loadTokenFromUrl();
     }
@@ -129,8 +130,11 @@ class Store {
     saveTokenInCookie() {
         if (this.token) {
             const options = {
-                path: '/'
+                path: '/',
             };
+            if (this._cookieOptionsDomain) {
+                options.domain = this._cookieOptionsDomain;
+            }
             options.maxAge = this.informations.exp - this.informations.iat;
             this._cookies.set('api-token', this.token, options);
         }

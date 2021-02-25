@@ -7,9 +7,12 @@ import * as jwt from 'jsonwebtoken'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
 
 export interface Options {
-    endpoint: string,
-    publicKey: string,
+    endpoint: string
+    publicKey: string
     notifyLogout?: boolean
+    cookieOptions?: {
+        domain?: string
+    }
 }
 
 export interface Informations {
@@ -29,6 +32,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _refreshToken: RefreshTokenRequest
     protected _requestLogout: LogoutRequest
     protected _notifyLogout: boolean = true
+    protected _cookieOptionsDomain: string
 
     constructor (options: Options) {
         this._apiEndpoint = options.endpoint
@@ -47,6 +51,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this._cookies = new Cookies()
 
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true
+        this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : ''
 
         this.loadTokenFromCookie()
 
@@ -160,7 +165,11 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected saveTokenInCookie () {
         if (this.token) {
             const options: CookieSetOptions = {
-                path: '/'
+                path: '/',
+            }
+
+            if (this._cookieOptionsDomain) {
+                options.domain = this._cookieOptionsDomain
             }
 
             options.maxAge = this.informations.exp - this.informations.iat

@@ -7,6 +7,9 @@ export interface Options {
     endpoint: string;
     publicKey: string;
     notifyLogout?: boolean;
+    cookieOptions?: {
+        domain?: string;
+    };
 }
 export interface Informations {
     iat: number;
@@ -24,6 +27,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected _refreshToken: RefreshTokenRequest;
     protected _requestLogout: LogoutRequest;
     protected _notifyLogout: boolean;
+    protected _cookieOptionsDomain: string;
     constructor(options: Options);
     protected abstract createInformations(): T;
     get endpoint(): string;
