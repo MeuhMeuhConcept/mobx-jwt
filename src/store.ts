@@ -226,7 +226,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     }
 
     protected loadTokenFromUrl () {
-        if (location === undefined) {
+        if (typeof location === 'undefined') {
             return
         }
 

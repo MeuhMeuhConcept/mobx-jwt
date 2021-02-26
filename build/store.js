@@ -176,7 +176,7 @@ class Store {
         return now > limit;
     }
     loadTokenFromUrl() {
-        if (location === undefined) {
+        if (typeof location === 'undefined') {
             return;
         }
         const regex = new RegExp('[\\?&]token=([^&#]*)');
