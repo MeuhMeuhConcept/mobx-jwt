@@ -226,6 +226,10 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     }
 
     protected loadTokenFromUrl () {
+        if (location === undefined) {
+            return
+        }
+
         const regex = new RegExp('[\\?&]token=([^&#]*)')
         const results = regex.exec(location.search)
 
