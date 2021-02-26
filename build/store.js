@@ -140,7 +140,14 @@ class Store {
         }
     }
     deleteTokenCookie() {
-        this._cookies.remove('api-token');
+        const options = {
+            path: '/',
+        };
+        if (this._cookieOptionsDomain) {
+            options.domain = this._cookieOptionsDomain;
+        }
+        this._cookies.set('api-token', null, options);
+        this._cookies.remove('api-token', options);
     }
     refreshTokenIfItNeed() {
         if (!this.tokenHasToBeRefreshed()) {

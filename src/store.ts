@@ -179,7 +179,16 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     }
 
     protected deleteTokenCookie () {
-        this._cookies.remove('api-token')
+        const options: CookieSetOptions = {
+            path: '/',
+        }
+
+        if (this._cookieOptionsDomain) {
+            options.domain = this._cookieOptionsDomain
+        }
+
+        this._cookies.set('api-token', null, options)
+        this._cookies.remove('api-token', options)
     }
 
     protected refreshTokenIfItNeed (): void {
