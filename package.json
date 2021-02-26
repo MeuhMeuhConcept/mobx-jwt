@@ -1,6 +1,6 @@
 {
   "name": "mobx-jwt",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "main": "build/index.js",
   "typings": "build/index",
   "repository": "git@github.com:MeuhMeuhConcept/mobx-jwt.git",

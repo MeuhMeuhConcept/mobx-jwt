@@ -145,9 +145,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    protected loadTokenFromCookie () {
-        const token = this._cookies.get('api-token')
-
+    public loadTokenFromString (token: string) {
         if (token) {
             try {
                 const decoded = jwt.verify(token, this._apiPublicKey)
@@ -159,6 +157,14 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             } catch (error) {
                 // do nothing
             }
+        }
+    }
+
+    protected loadTokenFromCookie () {
+        const token = this._cookies.get('api-token')
+
+        if (token) {
+            this.loadTokenFromString(token)
         }
     }
 

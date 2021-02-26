@@ -111,8 +111,7 @@ class Store {
             rememberMe: rememberMe
         };
     }
-    loadTokenFromCookie() {
-        const token = this._cookies.get('api-token');
+    loadTokenFromString(token) {
         if (token) {
             try {
                 const decoded = jwt.verify(token, this._apiPublicKey);
@@ -125,6 +124,12 @@ class Store {
             catch (error) {
                 // do nothing
             }
+        }
+    }
+    loadTokenFromCookie() {
+        const token = this._cookies.get('api-token');
+        if (token) {
+            this.loadTokenFromString(token);
         }
     }
     saveTokenInCookie() {

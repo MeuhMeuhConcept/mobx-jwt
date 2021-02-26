@@ -40,6 +40,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     forceLogout(): void;
     protected eraseCredentials(): void;
     protected buildLoginData(username: string, password: string, rememberMe?: boolean): {};
+    loadTokenFromString(token: string): void;
     protected loadTokenFromCookie(): void;
     protected saveTokenInCookie(): void;
     protected deleteTokenCookie(): void;
