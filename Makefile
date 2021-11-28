@@ -12,7 +12,7 @@ bash: ## Launch bash in docker container with PHP
 		--interactive \
 		--tty \
 		--rm \
-		meuhmeuhconcept/php:2.3.2 \
+		meuhmeuhconcept/node:1.1 \
 		/bin/login -p -f $(shell whoami)
 
 console: ## Launch zsh in docker container with PHP
@@ -28,7 +28,7 @@ console: ## Launch zsh in docker container with PHP
 		--interactive \
 		--tty \
 		--rm \
-		meuhmeuhconcept/php:2.3.2 \
+		meuhmeuhconcept/node:1.1 \
 		/bin/login -p -f $(shell whoami)
 
 test:
